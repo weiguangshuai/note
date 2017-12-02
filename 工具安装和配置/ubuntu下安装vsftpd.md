@@ -3,7 +3,7 @@
 1、安装vsftpd
 >sudo apt-get install vsftpd
 	
-2、新建目录/home/ftp作为用户的主目录，新建用户，更改密码；添加权限
+2、新建目录/home/ftp作为用户的主目录，新建用户，更改密码，添加权限
 
 	>sudo mkdir /home/ftp
 	sudo useradd -d /home/ftp -M weigs
@@ -38,4 +38,4 @@
 >sudo service stop
 >sudo service restart
 
-7、注意要打开21端口，查看防火墙此端口是否打开
+7、注意要打开21端口，查看防火墙此端口是否打开；如果使用windows去连接，应该关闭防火墙，不然会报405错误

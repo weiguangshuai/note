@@ -3,11 +3,12 @@
 1、安装vsftpd
 >sudo apt-get install vsftpd
 	
-2、新建目录/home/ftp作为用户的主目录，新建用户，更改密码
+2、新建目录/home/ftp作为用户的主目录，新建用户，更改密码；添加权限
 
 	>sudo mkdir /home/ftp
 	sudo useradd -d /home/ftp -M weigs
 	sudo passwd weigs
+	sudo chmod 777 /home/ftp
 
 
 3、新建文件/etc/vsftpd.user_list，用于存放访问ftp的用户，在其中添加访问weigs用户

@@ -11,7 +11,7 @@ HashMap的底层是使用数组+链表的结构实现的，当链表的结构超
 
 ### HashMap的工作原理
 
-1、Node内部类
+1.Node内部类
 
 HashMap中有一个非常重要的字段，Node[] table,即哈希桶数组，它是一个Node的数组。看一下Node的源码,它是一个内部类。
 
@@ -33,6 +33,5 @@ static class Node<K,V> implements Map.Entry<K,V> {
 ```
 从内部类中可以很明显了解到Node的具体功能，其中hash是用来存储该元素的hash值，key和value分别代表着元素的键值。
 
-2、扩容机制
-
-
+2.扩容机制
+![](https://github.com/weiguangshuai/note/blob/master/334906-106.jpg)

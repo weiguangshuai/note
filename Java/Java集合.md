@@ -34,4 +34,3 @@ static class Node<K,V> implements Map.Entry<K,V> {
 从内部类中可以很明显了解到Node的具体功能，其中hash是用来存储该元素的hash值，key和value分别代表着元素的键值。
 
 2.扩容机制
-![](https://github.com/weiguangshuai/note/blob/master/334906-106.jpg)

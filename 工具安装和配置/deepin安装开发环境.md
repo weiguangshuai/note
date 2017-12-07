@@ -110,3 +110,4 @@ grant privileges on databasename.tablename to 'username'@'host'
 - privileges：用户的操作权限,如select、update等，如果要授权所有权限则使用all
 - databasename：数据库名
 - tablename：表明
+

@@ -83,3 +83,30 @@ TOMCAT_HOME=/usr/local/apache-tomcat-8.5.12
 ```
 
 ## deepin下安装mysql
+
+1.直接使用apt-get包管理器安装mysql
+```
+sudo apt-get install mysql-server mysql-client
+```
+安装过程中需要自己设定root的密码
+
+2.修改mysql为utf8编码
+- 打开/etc/mysql/mysql.conf.d下的mysqld.cnf文件,修改如下
+    - 在[mysqld] 的skip-external-locking下，添加character-set-server=utf8
+
+- 打开/etc/mysql/conf.d下的mysql.cnf文件，添加如下内容
+    - 在[mysql]下插入一行：default-character-set=utf8
+
+3.为平时开发创建一个用户
+```
+create user 'username'@'host' identified by 'passwd'
+```
+- host表示该用户可以从哪个主机进行登录，如果所有允许所有主机进行登录，则使用通配符%
+
+为用户授权
+```
+grant privileges on databasename.tablename to 'username'@'host'
+```
+- privileges：用户的操作权限,如select、update等，如果要授权所有权限则使用all
+- databasename：数据库名
+- tablename：表明

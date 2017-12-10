@@ -218,3 +218,40 @@ server
     }
 }
 ```
+
+## nginx缓存机制
+
+- 404错误驱动web缓存
+```
+配置将404错误响应进行重定向，然后使用location块捕获重定向请求，向后端服务器发送请求获取响应数据，然后将数据转发给客户端的同时缓存到本地
+
+location / {
+    root /myweb/server/;
+    error_page 404 =200 /errpage$request_uri;       #404重定向到/errpage目录下
+}
+
+location /errpage/ {
+    internal;       #不能通过外链接直接访问
+    alias /home/html/;
+    proxy_pass http://backend/;     #后端upstream地址或者源地址
+    proxy_store on;        #指定nginx将代理返回的文件保存
+    proxy_store_access user:rw group:rw all:r;      #配置缓存数据的访问权限
+    proxy_temp_path /myweb/server/tmp;      #配置临时目录，该目录要和/myweb/server/在同一硬盘分区中
+}
+```
+**这种缓存机制只能缓存200状态码下的响应数据，所以我们将404错误重新改写为200状态码**
+
+- 基于memcached的缓存机制
+    - memcached_pass address：配置memcached服务器的地址
+    - memcached_connect_timeout time：设置连接memcached的超时时间
+    - memcached_read_timeout time：配置向memcached服务器发出两次read请求之间的超时等待时间，如果这段时间内没有进行数据传输，连接将会关闭
+    - memcached_send_timeout time：配置向memcached服务器发出两次write请求之间的超时等待时间，如果这段时间内没有进行数据传输，连接将会关闭
+    - memcached_buffer_size size：配置nginx服务器用于接收memcache服务器响应数据的缓存区的大小
+    - memcached_next_upstream status...：配置在发生哪些异常情况下，将请求顺次交给下一组内服务器处理；status为设置memcached服务器返回状态，可以是一个或者多个。
+        - error，在建立连接、向memcached服务器发送请求或者读取响应头时服务器发生连接错误
+        - timeout，在建立连接、向memcached服务器发送请求或者读取响应头时服务器发生连接超时
+        - invalid_header，memcached服务器返回的响应头为空或者无效
+        - not_found，memcached服务器未找到对应的键值对
+        - off，无法将请求发送给memcached服务器
+
+

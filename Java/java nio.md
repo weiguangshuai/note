@@ -13,9 +13,16 @@
 
 1.新创建一个buffer，创建成功以后结构如下
 
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer1_20171212122936.png)
+
 2.使用put向缓存区中添加元素，添加元素以后的结构如下
 
-3.缓存区可以直接使用get()方法遍历来获取元素，但是使用前要进行翻转，使用flip()方法，前后如下
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer2_20171212123135.png)
+
+3.缓存区可以直接使用get()方法遍历来获取元素，但是使用前要进行翻转，使用flip()方法，翻转后如下
+
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer3_20171212123321.png)
+
 
 ### 两个buffer进行比较
 
@@ -26,3 +33,12 @@
 2.两个对象都剩余同样数量的元素。buffer的容量不需要相同，而且缓冲区剩余数据的索引也不必相同，但是每个缓存区中剩余元素的数目必须相同
 
 3.在每个缓存区中被get()函数返回的剩余数据元素序列必须一致
+
+相同：
+
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer4_20171212123954.png)
+
+不同：
+
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer5_20171212124029.png)
+

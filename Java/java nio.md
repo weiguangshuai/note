@@ -42,3 +42,32 @@
 
 ![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/buffer5_20171212124029.png)
 
+
+
+### 视图缓冲器
+>当一个管理其他缓冲器所包含的的数据元素的缓冲器被创建时，这个缓冲器被成为视图缓冲器。大多数的视图缓冲器都是ByteBuffer的视图。
+
+1.duplicate()函数创建一个与原始缓存区相似的缓存区。两个缓存区共享数据元素，拥有同样的容量，但每个缓冲区拥有各自的位置、上界和标记属性。对一个缓冲区内的数据元素所做的改变会反映到另外一个缓冲区上。这一副本缓冲区具有与原始缓冲区同样的数据视图。如果原始的缓冲区为只读,或者为直接缓冲区,新的缓冲区将继承这些属性。
+
+```Java
+CharBuffer buffer = CharBuffer.allocate(8);
+buffer.position(3).limit(6).mark().position(5);
+CharBuffer dupeBuffer  = buffer.duplicate();
+buffer.clear();
+```
+
+2.分割缓冲区与复制相似，但是slice()创建一个从原始缓冲区的当前位置开始的新缓冲区，并且其容量是原始缓冲区的剩余元素数量(limit-position)。
+
+
+## Channel
+>Channel用于字节缓冲区和位于通道另一侧的实体（通常是一个文件或套接字）之间的有效传输
+
+### 打开通道
+
+通道有两种，分别是文件(file)通道和套接字(socket)通道；socket通道有可以直接创建新socket通道的工厂方法。FileChannel对象只能通过打开一个RandomAccessFile、FileInputStream和FileOutPutStream对象上调用getChannel()方法来获取，不能直接创建一个FileChannel对象。
+
+### 使用通道
+
+通道可以是单向的，也可以是双向的。一个实现了ReadableByteChannel接口的channel类，一个实现了WriteableByteChannel接口的channel类，这两个类都是单向的，只有都实现了这两个接口的类才是双向的
+
+对对对

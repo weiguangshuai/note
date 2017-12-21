@@ -70,4 +70,11 @@ buffer.clear();
 
 通道可以是单向的，也可以是双向的。一个实现了ReadableByteChannel接口的channel类，一个实现了WriteableByteChannel接口的channel类，这两个类都是单向的，只有都实现了这两个接口的类才是双向的
 
-对对对
+**注意**：一个连接到只读文件的Channel实例不能进行写操作，即使该实例所属的类可能有write方法
+
+**gather写操作**:数据从缓冲区阵列引用的每个缓冲区中gather并被组合成沿着通道发送的字节流
+
+**scatter读操作**:从通道传输来的数据被scatter到所有列缓冲区，依次填充每个缓冲区
+
+### 文件通道
+

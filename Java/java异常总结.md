@@ -176,7 +176,7 @@ BException{}
 ```Java
 public class ReturnAboutTryCatchFinally {
     @Test
-    public void testTryFinally() {
+    public void testTryFinally {
         System.out.println(tryFinally());
     }
 
@@ -212,5 +212,3 @@ public class Test{
     }
 }
 ```
-
-3.

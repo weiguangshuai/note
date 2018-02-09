@@ -68,3 +68,68 @@ MySQL在存储枚举时非常紧凑，会根据列表值得数量压缩到一个
 - 有时候混用范式和反范式可以很好的避免插入和删除的问题
 
 
+## 计数器表
+
+- 普通方法：如果是在表中保存计数器，则在更新计数器时可能碰到并发问题。所以选择使用一张表来单独记录web应用的访问量（计数器），但是如果一个表只有一个记录的话，每次更新这个记录上都有一个全局的互斥锁，这使得事务只能串行执行。
+
+  ```sql
+  create table hit_counter (
+  	cnt int unsigned not null
+  ) ENGINE=InnoDB;
+  ```
+
+  ​
+
+- 改进方法：上面普通方法中说到事务串行的问题，改进可以将计数器保存在多行，每次随机选择一次更新，可以避免事务串行执行。
+
+  ```sql
+  create table hit_counter (
+  	slot tinyint unsigned not null primary key,
+    	cnt int unsigned not null
+  )ENGINE=InnoDB;
+
+  select sum(cnt) from hit_counter;
+  ```
+
+## 加快ALTER TABLE操作速度
+
+ALTER TABLE操作的性能对于大表来说是个灾难，因为这个操作会新建一个表，将原来的数据复制到新表中，最后将原来的表删除。加快ALTER TABLE的操作速度最好的办法就是不引起表重建，下面两种方法，其中一个方法可以不更改表结构，而是直接修改.frm文件。
+
+```sql
+#这个语句会更改表结构
+ALTER TABLE sakila.film MODIFY COLUMN rental_duration TINYINT(3) NOT NULL DEFAULT 5;
+#这个语句不会更改表结构，直接修改.frm文件而不设计表数据
+ALTER TABLE sakila.film ALTER COLUMN rentai_duration SET DEFAULT 5;
+```
+
+
+
+### 只修改.frm文件
+
+只修改.frm文件是最快的ALTER TABLE的方法，具体的操作步骤如下：
+
+- 创建一张有相同结构的空表，并进行所需要的修改
+- 执行FLUSH TABLES WITH READ LOCK，这将会关闭所有正在使用的表，并且禁止任何表被打开
+- 交换.frm文件
+- 执行UNLOCK TABLES来释放第二步的读锁
+
+```sql
+原表明sakila.film,新建的表名sakila.film_new
+CREATE TABLE sakila.film_new LIKE sakila.film;
+#修改表，添加PG-14选项
+ALTER TABLE sakila.film_new MODIFY COLUMN rating ENUM('G','PG','PG-13','R','NC-17','PG-14') DEFALUT 'G';
+FLASH TABLES WITH READ LOCK;
+
+mv film.frm film_tmp.frm
+mv film_new.frm film.frm
+mv film_tmp.frm film_new.frm
+
+UNLOCK TABLES;
+
+#上面的步骤可以只更改.frm文件
+```
+
+
+
+
+

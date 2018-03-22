@@ -72,5 +72,63 @@ Git克隆的是该Git仓库服务器上的几乎所有的数据，而不是仅�
 
 
 
-### 修改已暂存文件
+### 状态简览
+
+```shell
+git status -s
+git status --short	
+```
+
+上面两个命令可以将状态以更为紧凑的格式输出：新添加未跟踪的文件前面有`？？`标记，新添加到暂存区的文件前面有`A`标记，修改过的文件前面有`M`标记。出现在靠左的`M` 表示该文件被修改了并放入了暂存区；出现在右边的`M` 表示文件被修改了但是还没有放入暂存区。
+
+
+
+### 忽略文件
+
+一般我们有些文件不需要纳入git进行管理，在这种情况下，我们创建一个名为`.gitignore` 文件，列出要忽略的文件模式。
+
+`.gitignore` 文件的格式规范如下：
+
+- 所有空行和以#开头的行都会被Git忽略
+- 可以使用标准的glob模式匹配
+- 匹配模式可以以（/ ）开头防止递归
+- 匹配模式可以以（/）结尾指定目录
+- 要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反
+
+```shell
+# no .a files
+*.a
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+# only ignore the TODO file in the current directory, not subdir/TODO
+/TODO
+# ignore all files in the build/ directory
+build/
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+# ignore all .pdf files in the doc/ directory
+doc/**/*.pdf
+```
+
+
+
+### 移除文件
+
+要从`Git` 中移除某个文件，就必须要从已跟踪清单中移除，然后提交。可以使用命令`git rm filename` 来完成此项工作，并连带从工作目录中移除指定的文件。如果想保留工作目录中的文件，可以使用命令`git rm --cached filename` 来执行
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

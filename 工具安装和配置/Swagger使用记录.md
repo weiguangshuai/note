@@ -117,7 +117,7 @@ Swagger 提供了一个静态项目 Swagger-ui，可以帮忙将获得的JSON格
 
 在`index.html` 中找到`url` ，更改为http://host:port/projectname/v2/api-docs，启动项目，访问http://host:port/projectname/swagger/index.html，将会出现以下界面，证明配置集成成功。
 
-
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/swagger_springmvc.png)
 
 
 

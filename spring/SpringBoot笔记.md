@@ -37,6 +37,8 @@ SpringBoot不用像Spring那样需要在构建项目初期写很多配置文件�
 
 SpringBoot本质上就是Spring项目，所以它的项目目录结构没有其他的变化，只是在src/main/java下会有一个启动类，用于启动项目，这里我们把Application.java放在了com.cqupt.sleep下。
 
+![](https://github.com/weiguangshuai/note/blob/master/%E5%9B%BE%E5%BA%8A/springboot_1.png)
+
 从上图我们可以看到项目的结构，目录com.cqupt.sleep结构如下：
 
 ```

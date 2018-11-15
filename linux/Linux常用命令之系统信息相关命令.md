@@ -55,7 +55,7 @@ df -h
 
 ### 查看Linux系统型号
 
-####查看操作系统型号
+#### 查看操作系统型号
 
 ```shell
 cat /etc/redhat-release

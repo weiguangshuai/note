@@ -77,4 +77,90 @@
 - `docker commit \<CONTAIN-ID> \<IMAGE-NAME>`：把一个正在运行的容器保存为镜像
 
   ​
+##Dockerfil文件
+
+Dockerfile由两个部分组成，注释和命令+参数，下面是构建Springboot项目时使用的Dockerfile：
+
+```dockerfile
+FROM java:8
+ADD spring-boot-docker-1.0.jar app.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+```
+
+### 常用命令
+
+- `FROM`：获取基础镜像，FROM必须是第一个命令，如果需要多个镜像时，可以使用多个FROM指令（每个镜像一次）
+
+```dockerfile
+# FROM [image name]
+FROM ubuntu
+FROM java:8
+```
+
+- `MAINTAINER`：维护者信息，已经被弃用
+- `RUN`：在构建镜像过程中执行特定的指令，并生成一个中间镜像
+  - `RUN <commond>`：shell格式
+  - `RUN ["executable", "param1", "param2"]`：exec格式
+- `CMD`：指定容器运行时的默认参数，如果出现多次以最后一次为准
+  - `CMD ["executable", "param1", "param2"]`：exec格式
+  - `CMD command param1 param2`：shell格式
+- `LABEL`：给构建的镜像打标签，如果base image中也有标签，则继承，如果是同名标签，则覆盖。
+  为了减少图层数量，尽量将标签写在一个`LABEL`指令中去
+
+```dockerfile
+LABEL <key>=<value> <key>=<value> ...
+# 实例
+LABEL multi.lable1="value1" multi.lable2="value2" other="value3"
+```
+
+- `EXPOSE`：为构建的镜像设置监听端口，但是并不会让容器监听host的端口
+
+```dockerfile
+EXPOSE <port> [<port>...]
+#多个映射接口
+EXPOSE 8080
+EXPOSE 8090
+EXPOSE 9090
+```
+
+- `ENV`：在构建的镜像中设置环境变量
+
+```dockerfile
+#可以设置多个环境变量，如果<value>中存在空格，需要转义或用引号"括起来
+ENV myName="John Doe" \
+    myDog=Rex\ The\ Dog \
+    myCat=fluffy
+```
+
+- `ADD`：在构建镜像时，复制文件到镜像中
+
+```dockerfile
+# <src>可以是文件、目录，也可以是文件URL,如果<src>是个目录，则复制的是目录下的所有内容，但不包括该目录
+# <dest>可以是绝对路径，也可以是相对WORKDIR目录的相对路径
+ADD <src>... <dest>
+ADD ["<src>",... "<dest>"]
+```
+
+- `COPY`：和`ADD`命令类似
+- `ENTRYPOINT`：指定镜像的执行程序，只有最后一条的`ENTRYPOINT`指令有效
+
+```dockerfile
+#CMD和ENTRYPOINT至少得使用一个。ENTRYPOINT应该被当做docker的可执行程序，CMD应该被当做ENTRYPOINT的默认参数
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+```
+
+- `VOLUME`：指定镜像内的目录为数据卷，使此目录具有持久化存储数据的功能，该目录可以被容器本身访问，也可以被其他容器访问
+
+```dockerfile
+VOLUME ["/var/log"]
+VOLUME /var/log /var/db
+```
+
+
+
+
+
+
+
+
 

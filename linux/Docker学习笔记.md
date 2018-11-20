@@ -158,6 +158,28 @@ VOLUME /var/log /var/db
 
 
 
+## 部署前端项目
+
+> 前端部署需要安装nginx镜像，通过将硬盘中的目录和配置文件挂载到容器中的文件来实现项目的启动，具体操作如下：
+
+- 拉取nginx官方镜像
+
+```shell
+#从官方库中拉取nginx镜像
+docker pull nginx
+```
+
+- 使用nginx镜像运行容器
+
+```shell
+# -p 80:80：将容器80端口映射到主机的80端口
+# -v $PWD/nginx.conf:/etc/nginx/nginx.conf：将冒号前面的主机目录挂载到冒号后面的容器目录，此处是启动nginx的配置文件
+# -v $PWD/html:/etc/nginx/html：同上，此处是将项目所在主机的目录挂载到容器中
+docker run -p 80:80 --name weigs-ngnix -d -v $PWD/nginx.conf:/etc/nginx/nginx.conf -v $PWD/html:/etc/nginx/html nginx
+```
+
+
+
 
 
 

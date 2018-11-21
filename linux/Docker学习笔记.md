@@ -21,7 +21,7 @@
   - docker load -i ubuntu14.tar
   - docker load < /home/save.tar
 
-- `docker build -t <镜像名> \<Dockerfile路径\>`
+- `docker build -t <镜像名> <Dockerfile路径>`
 
   - docker build -t weigs/demo .：weigs/demo代表镜像名，.代表当前路径
 
@@ -62,7 +62,7 @@
   - -p：提交时暂停容器
   - docker commit -a "user" -m "commit info" \[CONTAINER] \[imageName]:[imageTag]
 
-- `docker login --username=[username] --password=[password] \[registryURL]`：登录到某个远程仓库
+- `docker login --username=[username] --password=[password] [registryURL]`：登录到某个远程仓库
 
 - `docker tag`：标记本地镜像，将其归入某一仓库
 
@@ -74,7 +74,7 @@
 
   - docker rm \`docker ps -a -q`：删除所有的容器
 
-- `docker commit \<CONTAIN-ID> \<IMAGE-NAME>`：把一个正在运行的容器保存为镜像
+- `docker commit <CONTAIN-ID> <IMAGE-NAME>`：把一个正在运行的容器保存为镜像
 
   ​
 ##Dockerfil文件
@@ -177,10 +177,6 @@ docker pull nginx
 # -v $PWD/html:/etc/nginx/html：同上，此处是将项目所在主机的目录挂载到容器中
 docker run -p 80:80 --name weigs-ngnix -d -v $PWD/nginx.conf:/etc/nginx/nginx.conf -v $PWD/html:/etc/nginx/html nginx
 ```
-
-
-
-
 
 
 

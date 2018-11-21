@@ -162,6 +162,8 @@ VOLUME /var/log /var/db
 
 > 前端部署需要安装nginx镜像，通过将硬盘中的目录和配置文件挂载到容器中的文件来实现项目的启动，具体操作如下：
 
+1、第一种方法使用nginx镜像启动，启动时挂载主机的硬盘，读取硬盘中的文件启动nginx，具体如下：
+
 - 拉取nginx官方镜像
 
 ```shell
@@ -178,7 +180,30 @@ docker pull nginx
 docker run -p 80:80 --name weigs-ngnix -d -v $PWD/nginx.conf:/etc/nginx/nginx.conf -v $PWD/html:/etc/nginx/html nginx
 ```
 
+2、第二种方法是直接将nginx和前端代码打包成docker镜像，具体操作如下：
 
+- Dockerfile文件内容
 
+```dockerfile
+FROM nginx
+#删除容器中nginx的默认配置文件
+RUN rm -rf /etc/nginx/nginx.conf
+#将本地代码copy到容器中
+ADD mz-feature-mwc-customization /etc/nginx/html/mz-feature-mwc-customization
+#使用本地自己配置的nginx配置文件代替容器中默认的配置文件
+ADD nginx.conf /etc/nginx/nginx.conf
+```
 
+- 构建镜像
+
+```shell
+docker build -t weigs/xxxx .
+```
+
+- 启动镜像进行测试
+
+```dockerfile
+#注意：容器内部的映射端口应该和nginx配置文件的启动端口一样
+docker run -p 8080:8080 --name my-test -d weigs/xxxx
+```
 

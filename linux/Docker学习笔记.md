@@ -1,5 +1,55 @@
 # Docker
 
+## 安装Docker
+
+> Docker安装在centos7上，但是要注意的是系统的内核必须是3.10及以上的版本，不然安装不成功
+
+- 首先是确定系统是否能够安装Docker
+
+```shell
+#查看系统的全部信息
+uname -a
+#查看系统的内核信息
+uname -r
+```
+
+- 卸载旧的版本（如果安装过旧的版本话）
+
+```shell
+yum remove docker  docker-common docker-selinux docker-engine
+```
+
+- 安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的
+
+```shell
+yum install -y yum-utils device-mapper-persistent-data lvm2
+```
+
+- 设置yum源
+
+```shell
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+#或者使用阿里云的镜像
+yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+```
+
+- 查看仓库中的所有Docker版本，并选择特定的版本安装
+
+```shell
+yum list docker-ce --showduplicates | sort -r
+```
+
+- 安装Docker
+
+```
+#默认安装仓库中最新的版本
+yum install docker-ce
+#指定版本安装docker，<FQPN>表示指定的版本
+yum install <FQPN>
+```
+
+
+
 ## Docker常用命令
 
 ### 镜像操作

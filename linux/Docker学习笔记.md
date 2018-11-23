@@ -2,7 +2,7 @@
 
 ## 安装Docker
 
-> Docker安装在centos7上，但是要注意的是系统的内核必须是3.10及以上的版本，不然安装不成功
+> Docker安装在centos7上，但是要注意的是centos系统的内核必须是3.10及以上的版本，不然安装不成功
 
 - 首先是确定系统是否能够安装Docker
 
@@ -28,6 +28,7 @@ yum install -y yum-utils device-mapper-persistent-data lvm2
 - 设置yum源
 
 ```shell
+#注意：如果已经设置了源，想更改源的时候报错，可以进入/etc/yum.repos.d目录中删除docker-ce.repo文件
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 #或者使用阿里云的镜像
 yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
@@ -46,6 +47,25 @@ yum list docker-ce --showduplicates | sort -r
 yum install docker-ce
 #指定版本安装docker，<FQPN>表示指定的版本
 yum install <FQPN>
+```
+
+- 修改/etc/docker目录下的daemon.json文件（如果没有需要自己创建），在文件中加入以下的内容
+
+```json
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+```
+
+- 修改配置文件后需要重启容器（相关命令如下所示）
+
+```shell
+#启动容器
+service docker start
+#重启容器
+service docker restart
+#停止容器
+service docker stop
 ```
 
 

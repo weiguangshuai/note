@@ -70,6 +70,46 @@ service docker stop
 
 
 
+> 官方文档上的教程只支持centos7.x的操作系统，对于centos6.x的系统需要以别的方式进行安装，具体如下
+
+- 安装EPEL
+
+```shell
+rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+yum -y install yum -priorities
+#安装docker
+yum -y install docker-io
+#启动docker
+service docker start
+```
+
+
+
+###以非 root 用户身份管理 Docker
+
+> `docker` 守护进程绑定至 Unix 套接字，而不是 TCP 端口。默认情况下，该 Unix 套接字由用户 `root` 所有，而其他用户只能使用 `sudo`访问它。`docker` 守护进程始终以 `root` 用户身份运行。
+>
+> 在使用 `docker` 命令时，如果您不想使用 `sudo`，请创建名为 `docker` 的 Unix 组并向其中添加用户。`docker` 守护进程启动时，它将使 Unix 套接字的所有权可由 `docker` 组进行读取/写入
+
+- 创建docker组
+
+```shell
+sudo groupadd docker
+```
+
+- 像docker组中添加用户
+
+```shell
+sudo usermod -aG docker $USER
+#例如,添加tomcat用户
+sudo usermod -aG docker tomcat
+```
+
+- 注销并重新登录，以便对您的组成员资格进行重新评估。如果在虚拟机上进行测试，可能必须重启此虚拟机才能使更改生效。在桌面 Linux 环境（例如，X Windows）中，彻底从您的会话中注销，然后重新登录
+
+
+
 ## Docker常用命令
 
 ### 镜像操作
@@ -147,7 +187,7 @@ service docker stop
 - `docker commit <CONTAIN-ID> <IMAGE-NAME>`：把一个正在运行的容器保存为镜像
 
   ​
-##Dockerfil文件
+##Dockerfile文件
 
 Dockerfile由两个部分组成，注释和命令+参数，下面是构建Springboot项目时使用的Dockerfile：
 
@@ -159,10 +199,11 @@ ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
 ### 常用命令
 
-- `FROM`：获取基础镜像，FROM必须是第一个命令，如果需要多个镜像时，可以使用多个FROM指令（每个镜像一次）
+- `FROM`：获取基础镜像，FROM必须是第一个命令，如果需要多个镜像时，可以使用多个FROM指令（每个镜像一次），如果不加tag，默认是使用`latest`
 
 ```dockerfile
-# FROM [image name]
+# FROM <image name>
+# FROM <image name>:<tag>
 FROM ubuntu
 FROM java:8
 ```

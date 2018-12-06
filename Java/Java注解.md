@@ -55,8 +55,54 @@ public @interface UserCase {
 下面我们先编写一个简单的注解处理器，然后通过对注解处理的讲解进一步认识和学习怎么编写一个注解处理器，以及编写注解处理器时的注意事项
 
 ```java
+//注解
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface UserCase {
+    public int id();
+    public String desc() default "no desc";
+}
+//注解处理器
+public class UseCaseTracker {
+    private static void trackUseCases(List<Integer> useCases, Class<?> cl) {
+        for (Method method : cl.getDeclaredMethods()) {
+            UseCase useCase = method.getAnnotation(UseCase.class);
+            if (useCase != null) {
+                System.out.println("Found Use Case: " + useCase.id() + " " + useCase.desc());
+                //由于list中是Integer类型，所以移除的时候需要使用以下方式，不然会被认定为角标，从而出错
+                useCases.remove(new Integer(useCase.id()));
+            }
+        }
+        for (int i : useCases) {
+            System.out.println("Warning: Missing use case-" + i);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Integer> useCases = new ArrayList<>();
+        Collections.addAll(useCases, 47, 48, 49, 50);
+        trackUseCases(useCases, PasswordUtils.class);
+    }
+}
 
 ```
+
+上面代码是一个注解和一个注解处理器，从注解上看，此注解包含`int`元素`id`，以及一个`String`元素`desc`，然而注解的元素不单只有这两种类型，注解元素可用的类型如下：
+
+- 所有的基本类型(`int`, `float`，`boolean`等)
+- `String`
+- `Class`
+- `enum`
+- `Annotation`
+- 以上类型的数组
+
+在注解的第二个元素我们发现，`desc`后有一个`default`修饰符，这是对注解元素的默认值的限制。对于注解来说，元素要么使用默认值，要么必须在使用的时候提供元素的值；
+
+像上面的`UseCase`注解，元素`id`没有使用默认值，那么在使用的时候就必须要提供一个元素的值；而对于元素`desc`则使用了默认值，那么我们可以在使用的时候不提供元素的值，如果在使用的时候提供元素的值，那么将会覆盖掉默认值。
+
+> 注意：不能以null作为默认值，如果需要表示某个元素不存在，可以使用空字符串或负数来表示
+
+
 
 
 

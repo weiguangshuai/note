@@ -8,7 +8,7 @@ mv jdk.1.8 /usr/local/java
 
 
 2.配置jdk环境变量
->sudo vim /etc/profile\
+>sudo vim /etc/profile
 
 在文件后面加入下面配置
 >JAVA_HOME=/usr/local/jdk8\
